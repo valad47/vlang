@@ -29,7 +29,7 @@ void stack_push(Stack *stack, void* data) {
 
 void *stack_pop(Stack *stack) {
   if (stack == NULL) {
-    fprintf(stderr, "stack pointer is NULL");
+    fprintf(stderr, "stack pointer is NULL\n");
     exit(1);
   }
   if (stack->sp == 0) {
@@ -43,21 +43,31 @@ void *stack_pop(Stack *stack) {
   
 int main(int argc, char **argv) {
   Flags compile_flags = 0;
+  Stack files = {0};
   for (int i = 1; i < argc; i++) {
     char *arg = argv[i];
-    if (arg[0] == '-')
+    if (arg[0] == '-') {
       for (char *flag = arg+1; *flag != '\0'; flag++) {
 	switch (*flag) {
 	case 'S':
 	  compile_flags |= ASM_ONLY;
 	  break;
 	default:
-	  fprintf(stderr, "No such flag \"%c\"", *flag);
+	  fprintf(stderr, "No such flag \"%c\"\n", *flag);
 	  exit(1);
 	}
       }
-    if(nob_file_exists(arg)) {
-      
+      continue;
     }
+    if(nob_file_exists(arg)) {
+      stack_push(&files, arg);
+    } else {
+      fprintf(stderr, "File \"%s\" does not exist.\n", arg);
+      exit(1);
+    }
+  }
+  if(files.sp == 0) {
+    fprintf(stderr, "No files were specified.\n");
+    exit(1);
   }
 }
