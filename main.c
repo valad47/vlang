@@ -9,7 +9,8 @@
 #define STACK_BASE 8
 
 typedef enum Flags {
-  ASM_ONLY = 0b1,
+  ASM_ONLY,
+  FLAGS_NUMBER
 } Flags;
 
 typedef struct Stack {
@@ -42,7 +43,7 @@ void *stack_pop(Stack *stack) {
 }
   
 int main(int argc, char **argv) {
-  Flags compile_flags = 0;
+  void *compile_flags[FLAGS_NUMBER] = {0};
   Stack files = {0};
   for (int i = 1; i < argc; i++) {
     char *arg = argv[i];
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
       for (char *flag = arg+1; *flag != '\0'; flag++) {
 	switch (*flag) {
 	case 'S':
-	  compile_flags |= ASM_ONLY;
+	  compile_flags[ASM_ONLY] = (void*)1;
 	  break;
 	default:
 	  fprintf(stderr, "No such flag \"%c\"\n", *flag);
