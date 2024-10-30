@@ -19,6 +19,25 @@ typedef struct Stack {
   int stack_size;
 } Stack;
 
+typedef enum TOKEN_TYPE {
+  INT,
+  INT_PTR,
+  CHAR,
+  CHAR_PTR,
+  VOID,
+  VOID_PTR,
+  EQUAL,
+  FUNC_DEF,
+  SCOPE_START,
+  SCOPE_END
+} TOKEN_TYPE;
+
+typedef struct TOKEN {
+  void *data;
+  TOKEN_TYPE type;
+  struct TOKEN *next;
+} TOKEN;
+
 void stack_push(Stack *stack, void* data) {
   stack->sp++;
   if (stack->sp >= stack->stack_size) {
